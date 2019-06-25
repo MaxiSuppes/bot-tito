@@ -6,11 +6,15 @@ export class Tito {
         this._commands = [HelpCommand, InfoCommand, MuteCommand, MeCommand]
     }
 
+    _commandFor(message) {
+        return this._commands.filter(command => command.acceptThis(message))[0];
+    }
+
+    neededDataFor(message) {
+        return this._commandFor(message).neededData();
+    }
+
     processMessage(message) {
-        this._commands.forEach(command => {
-            if (command.acceptThis(message)) {
-                return new command().reply();
-            }
-        });
+        return this._commandFor(message).reply();
     }
 }

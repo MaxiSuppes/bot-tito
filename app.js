@@ -1,16 +1,18 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import {MessageController} from "./controllers/MessageController";
+import {Tito} from "./models/Tito";
 
 // Set up the express app
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+const tito = new Tito();
 
 // Define endpoints
 app.post('/api/v1/todos', (request, response) => {
-    new MessageController(request, response).handleRequest()
+    new MessageController(request, response, tito).handleRequest();
 });
 
 

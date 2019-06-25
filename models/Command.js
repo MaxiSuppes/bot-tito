@@ -1,34 +1,38 @@
 export class HelpCommand {
     static acceptThis(message) {
-        return message.contains('help')
+        return message.includes('help')
+    }
+
+    static neededData() {
+        return '';
     }
 
     reply() {
-        return 'Los comandos disponibles son: ' +
-            'help: Muestra los comandos disponibles de Tito' +
-            'info: Muestra información del canal: integrantes, cantidad de mensajes, etc' +
-            'mute "n": Desactiva respuestas por n segundos' +
-            'me: Muestra información del usuario que envía el mensaje.';
+        return 'help: Muestra los comandos disponibles de Tito \n info: Muestra información del canal: integrantes, cantidad de mensajes, etc \n mute "n": Desactiva respuestas por n segundos \n me: Muestra información del usuario que envía el mensaje.';
     }
 }
 
 export class InfoCommand {
     static acceptThis(message) {
-        return message.contains('info')
+        return message.includes('info')
     }
 
-    constructor(channelId) {
-
+    static neededData() {
+        return 'channel';
     }
 
-    reply() {
+    reply(channel) {
 
     }
 }
 
 export class MuteCommand {
     static acceptThis(message) {
-        return message.contains('mute')
+        return message.includes('mute')
+    }
+
+    static neededData() {
+        return '';
     }
 
     reply() {
@@ -38,7 +42,25 @@ export class MuteCommand {
 
 export class MeCommand {
     static acceptThis(message) {
-        return message.contains('mute')
+        return message.includes('me')
+    }
+
+    static neededData() {
+        return 'user';
+    }
+
+    reply() {
+
+    }
+}
+
+export class NewCommand {
+    static acceptThis(message) {
+        return message.includes('welcome-user')
+    }
+
+    static neededData() {
+        return 'user';
     }
 
     reply() {
