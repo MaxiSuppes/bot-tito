@@ -5,13 +5,18 @@ const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJwYXNzd29y
 export class Api {
     constructor() {
         this._baseUrl = 'https://hypechat-server.herokuapp.com';
+        this._token = "";
+    }
+
+    addToken(token) {
+        this._token = token;
     }
 
     getUsers(teamId) {
         const options = {
             url: this._baseUrl + '/teams/' + teamId + '/users',
             headers: {
-                'X-Auth-Token': token
+                'X-Auth-Token': this._token
             }
         };
 
@@ -31,7 +36,7 @@ export class Api {
         const options = {
             url: this._baseUrl + '/teams/' + teamId + '/channels',
             headers: {
-                'X-Auth-Token': token
+                'X-Auth-Token': this._token
             }
         };
 
@@ -53,7 +58,7 @@ export class Api {
             url: this._baseUrl + '/teams/messages',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Auth-Token': token
+                'X-Auth-Token': this._token
             },
             body: {
                 team_id: params['teamId'],
@@ -75,9 +80,5 @@ export class Api {
                 }
             });
         });
-    }
-
-    sendMessageToUser() {
-
     }
 }

@@ -9,6 +9,7 @@ export class MessageController {
     }
 
     handleRequest() {
+        apiClient.addToken(this._request.headers['x-auth-token']);
         this._response.status(200).send({success: 'OK'});
         if (!this._bot.canReply()) {
             return;
@@ -36,8 +37,6 @@ export class MessageController {
 
     _processMessage(commandMessage, params, data) {
         const response = this._bot.processMessage(commandMessage, data);
-        console.log("response", response);
-        console.log("getMuteUntilDate()", getMuteUntilDate());
         apiClient.sendMessageToChannel(response, params);
     }
 }

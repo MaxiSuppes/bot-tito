@@ -8,6 +8,10 @@ class ApiClient {
         this.getChannel = this.getChannel.bind(this);
     }
 
+    addToken(token) {
+        this._api.addToken(token);
+    }
+
     _getEndpoints() {
         return {
             'user': this.getUser,
