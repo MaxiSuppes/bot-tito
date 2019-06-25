@@ -1,7 +1,5 @@
 const request = require("request");
 
-const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJwYXNzd29yZCI6ImFzZGFzZCIsInRpbWVzdGFtcCI6IjIwMTktMDYtMjQgMTk6NDM6MjguMjc2NTI5In0.NuQTuxlgGxMyDN5FC5IjT6Yo0wGMuvubamlmPHbs7ds";
-
 export class Api {
     constructor() {
         this._baseUrl = 'https://hypechat-server.herokuapp.com';
@@ -62,7 +60,7 @@ export class Api {
             },
             body: {
                 team_id: params['teamId'],
-                chat_id: params['chatId'],
+                chat_id: params['chatId'] || params['userId'],
                 content: response.content(),
                 message_type: 'TEXT',
                 mentions: response.mentions()

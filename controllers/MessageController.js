@@ -9,8 +9,9 @@ export class MessageController {
     }
 
     handleRequest() {
-        apiClient.addToken(this._request.headers['x-auth-token']);
         this._response.status(200).send({success: 'OK'});
+        apiClient.addToken(this._request.headers['x-auth-token']);
+        console.log("getMuteUntilDate", getMuteUntilDate());
         if (!this._bot.canReply()) {
             return;
         }
@@ -19,7 +20,8 @@ export class MessageController {
         const params = {
             teamId: this._request.body['team_id'],
             userId: this._request.body['user_id'],
-            chatId: this._request.body['chat_id']
+            chatId: this._request.body['chat_id'],
+            welcomeMessage: this._request.body['message'],
         };
         const neededData = this._bot.neededDataFor(commandMessage);
         if (neededData) {
@@ -36,7 +38,9 @@ export class MessageController {
     }
 
     _processMessage(commandMessage, params, data) {
-        const response = this._bot.processMessage(commandMessage, data);
+        const response = this._bot.processMessage(commandMessage, params, data);
+        console.log("response", response);
+        console.log("getMuteUntilDate", getMuteUntilDate());
         apiClient.sendMessageToChannel(response, params);
     }
 }
