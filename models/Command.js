@@ -1,3 +1,20 @@
+import {setMuteUntilDate} from "../config";
+
+class Response {
+    constructor(message, mentions) {
+        this._content = message;
+        this._mentions = mentions;
+    }
+
+    content() {
+        return this._content;
+    }
+
+    mentions() {
+        return this._mentions;
+    }
+}
+
 export class HelpCommand {
     static acceptThis(message) {
         return message.includes('help')
@@ -7,36 +24,53 @@ export class HelpCommand {
         return '';
     }
 
-    reply() {
-        return 'help: Muestra los comandos disponibles de Tito \n info: Muestra información del canal: integrantes, cantidad de mensajes, etc \n mute "n": Desactiva respuestas por n segundos \n me: Muestra información del usuario que envía el mensaje.';
+    reply(commandMessage) {
+        const content =
+            'help: Muestra los comandos disponibles de Tito \n ' +
+            'info: Muestra información del canal: integrantes, cantidad de mensajes, etc \n ' +
+            'mute "n": Desactiva respuestas por n segundos \n ' +
+            'me: Muestra información del usuario que envía el mensaje.';
+        const mentions = [];
+
+        return new Response(content, mentions);
     }
 }
 
 export class InfoCommand {
-    static acceptThis(message) {
-        return message.includes('info')
+    static acceptThis(commandMessage) {
+        return commandMessage.includes('info')
     }
 
     static neededData() {
         return 'channel';
     }
 
-    reply(channel) {
+    reply(commandMessage, channel) {
+        const content = `Info del canal Nombre: ${channel['name']}, Creador: ${channel['creator']['username']}, 
+                        Descripcion: ${channel['description'] || ''}, Visibilidad: ${channel['visibility']}`;
+        const mentions = [];
 
+        return new Response(content, mentions);
     }
 }
 
 export class MuteCommand {
-    static acceptThis(message) {
-        return message.includes('mute')
+    static acceptThis(commandMessage) {
+        return commandMessage.includes('mute')
     }
 
     static neededData() {
         return '';
     }
 
-    reply() {
+    reply(commandMessage) {
+        const seconds = commandMessage.split(" ")[1];
+        setMuteUntilDate(seconds);
+        const content = `Tito estará en silencio por ${seconds} segundos`;
 
+        const mentions = [];
+
+        return new Response(content, mentions);
     }
 }
 
@@ -49,8 +83,11 @@ export class MeCommand {
         return 'user';
     }
 
-    reply() {
+    reply(commandMessage, user) {
+        const content = `@${user['username']} Nombre: ${user['first_name']}, Apellido: ${user['last_name']}, Role: ${user['role']}`;
+        const mentions = [user['id']];
 
+        return new Response(content, mentions);
     }
 }
 

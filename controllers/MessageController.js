@@ -1,4 +1,5 @@
 import {apiClient} from "../api/apiClient";
+import {getMuteUntilDate} from "../config";
 
 export class MessageController {
     constructor(request, response, bot) {
@@ -9,18 +10,34 @@ export class MessageController {
 
     handleRequest() {
         this._response.status(200).send({success: 'OK'});
-        const neededData = this._bot.neededDataFor(this._request.body['params']);
-        const data = this._obtainNeededData(neededData, {
+        if (!this._bot.canReply()) {
+            return;
+        }
+
+        const commandMessage = this._request.body['params'];
+        const params = {
             teamId: this._request.body['team_id'],
             userId: this._request.body['user_id'],
             chatId: this._request.body['chat_id']
-        });
+        };
+        const neededData = this._bot.neededDataFor(commandMessage);
+        if (neededData) {
+            return this._obtainNeededData(neededData, params, (data) => {
+                this._processMessage(commandMessage, params, data);
+            });
+        }
+
+        return this._processMessage(commandMessage, params, {});
     }
 
-    _obtainNeededData(neededData, params) {
-        return apiClient.get(neededData, params);
+    _obtainNeededData(neededData, params, callback) {
+        apiClient.get(neededData, params, callback);
     }
 
-    _sendMessageToServer(response) {
+    _processMessage(commandMessage, params, data) {
+        const response = this._bot.processMessage(commandMessage, data);
+        console.log("response", response);
+        console.log("getMuteUntilDate()", getMuteUntilDate());
+        apiClient.sendMessageToChannel(response, params);
     }
 }

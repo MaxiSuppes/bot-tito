@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 const tito = new Tito();
 
 // Define endpoints
-app.post('/api/v1/todos', (request, response) => {
+app.post('/messages', (request, response) => {
     new MessageController(request, response, tito).handleRequest();
 });
 

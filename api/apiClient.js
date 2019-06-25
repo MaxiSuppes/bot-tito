@@ -5,11 +5,13 @@ class ApiClient {
         this._api = new Api();
 
         this.getUser = this.getUser.bind(this);
+        this.getChannel = this.getChannel.bind(this);
     }
 
     _getEndpoints() {
         return {
             'user': this.getUser,
+            'channel': this.getChannel,
         }
     }
 
@@ -17,24 +19,31 @@ class ApiClient {
         return this._getEndpoints()[neededData];
     }
 
-    get(neededData, params) {
+    get(neededData, params, callback) {
         const endpoint = this.endpointFor(neededData);
-        return endpoint(params);
+        return endpoint(params, callback);
     }
 
-    getUser({teamId, userId}) {
-        this._api.getUsers(teamId).then(result => {
+    getUser({teamId, userId}, callback) {
+        return this._api.getUsers(teamId).then(result => {
             const allUsers = result['users'];
-            return allUsers.filter(user => user['id'] === userId)[0];
+            const user = allUsers.filter(user => user['id'] === userId)[0];
+            callback(user);
         });
     }
 
-    getChannel(channelId) {
-
+    getChannel({teamId, chatId}, callback) {
+        return this._api.getChannels(teamId).then(result => {
+            const allChannels = result['channels'];
+            const channel = allChannels.filter(channel => channel['id'] === chatId)[0];
+            callback(channel);
+        });
     }
 
-    sendMessageToChannel(response) {
-
+    sendMessageToChannel(response, params) {
+        return this._api.sendMessageToChannel(response, params).then(result => {
+            console.log("result", result);
+        });
     }
 
     sendMessageToUser() {

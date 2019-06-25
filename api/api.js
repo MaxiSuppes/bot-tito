@@ -27,11 +27,27 @@ export class Api {
         });
     }
 
-    getChannel(channelId) {
+    getChannels(teamId) {
+        const options = {
+            url: this._baseUrl + '/teams/' + teamId + '/channels',
+            headers: {
+                'X-Auth-Token': token
+            }
+        };
 
+        return new Promise((resolve, reject) => {
+            request(options, (error, response, body) => {
+                if (error) return reject(error);
+                try {
+                    resolve(JSON.parse(body));
+                } catch(parseError) {
+                    reject(parseError);
+                }
+            });
+        });
     }
 
-    sendMessageToChannel(response) {
+    sendMessageToChannel(response, params) {
         const options = {
             method: 'POST',
             url: this._baseUrl + '/teams/messages',
@@ -40,18 +56,24 @@ export class Api {
                 'X-Auth-Token': token
             },
             body: {
-                team_id: 1,
-                chat_id: 4,
-                content: '@Luber' + response,
+                team_id: params['teamId'],
+                chat_id: params['chatId'],
+                content: response.content(),
                 message_type: 'TEXT',
-                mentions: [ 1 ] },
+                mentions: response.mentions()
+            },
             json: true
         };
 
-        request(options, (error, response, body) => {
-            if (error) throw new Error(error);
-
-            console.log(body);
+        return new Promise((resolve, reject) => {
+            request(options, (error, response, body) => {
+                if (error) return reject(error);
+                try {
+                    resolve(JSON.parse(body));
+                } catch(parseError) {
+                    reject(parseError);
+                }
+            });
         });
     }
 
