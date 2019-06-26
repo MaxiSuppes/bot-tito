@@ -72,7 +72,7 @@ export class Api {
             request(options, (error, response, body) => {
                 if (error) return reject(error);
                 try {
-                    resolve(JSON.parse(body));
+                    resolve(body);
                 } catch(parseError) {
                     reject(parseError);
                 }
