@@ -76,7 +76,7 @@ export class MuteCommand {
 
 export class MeCommand {
     static acceptThis(message) {
-        return message.includes('me')
+        return message.indexOf('me') === 0
     }
 
     static neededData() {
@@ -93,7 +93,7 @@ export class MeCommand {
 
 export class NewCommand {
     static acceptThis(message) {
-        return message.includes('new-user')
+        return message.indexOf('welcome-user') === 0;
     }
 
     static neededData() {
@@ -101,7 +101,7 @@ export class NewCommand {
     }
 
     reply(commandMessage, params, data) {
-        const content = params['welcomeMessage'] || '';
+        const content = params['welcomeMessage'] || 'Bienvenido';
         const mentions = [];
 
         return new Response(content, mentions);
