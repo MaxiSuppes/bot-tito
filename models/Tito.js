@@ -23,7 +23,12 @@ export class Tito {
     }
 
     canReply() {
-        const now = moment(new Date());
-        return now.diff(getMuteUntilDate()) > 0;
+        const now = moment();
+        if (getMuteUntilDate()) {
+            const muteDate = moment(getMuteUntilDate(), 'YYYY-MM-DD HH-mm-ss');
+            return now.diff(muteDate) > 0;
+        } else {
+            return true;
+        }
     }
 }

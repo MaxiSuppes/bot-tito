@@ -1,9 +1,10 @@
 var moment = require('moment');
 
-let muteUntilDate = moment(new Date());
+let muteUntilDate = '';
 
 export const setMuteUntilDate = function (seconds) {
-    muteUntilDate = muteUntilDate.add(seconds, "seconds")
+    const nextMuteDate = moment(new Date()).add(seconds, "seconds");
+    muteUntilDate = nextMuteDate.format('YYYY-MM-DD HH-mm-ss');
 };
 
 export const getMuteUntilDate = function () {

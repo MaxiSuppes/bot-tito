@@ -49,10 +49,6 @@ class ApiClient {
             console.log("result", result);
         });
     }
-
-    sendMessageToUser() {
-
-    }
 }
 
 export let apiClient = new ApiClient();

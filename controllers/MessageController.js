@@ -9,14 +9,12 @@ export class MessageController {
     }
 
     handleRequest() {
-        this._response.status(200).send(this._request.body);
         apiClient.addToken(this._request.headers['x-auth-token']);
-        console.log("getMuteUntilDate", getMuteUntilDate());
-        console.log("x-auth-token", this._request.headers['x-auth-token']);
         if (!this._bot.canReply()) {
-            return;
+            return this._response.status(200).send({"status": "OFF"});
         }
 
+        this._response.status(200).send({"status": "ON"});
         const commandMessage = this._request.body['params'];
         const params = {
             teamId: this._request.body['team_id'],
